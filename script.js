@@ -12,6 +12,23 @@ async function fetchWeatherData(locationCode) {
         return null;
     }
 }
+// funcion to convert the short forcast into our own weather icons
+function getWeatherIcon(shortForecast) {
+    if (shortForecast.includes('Sunny')) {
+        return 'Sunny.png';
+    } else if (shortForecast.includes('Mostly Sunny')) {
+        return 'Sunny.png';
+    } else if (shortForecast.includes('Partly Sunny')) {
+        return 'Sunny.png';
+    } else if (shortForecast.includes('Mostly Clear')) {
+    return 'Sunny.png';
+    } else if (shortForecast.includes('Partly Cloudy')) {
+        return 'PartlyCloudy.png';
+    } else if (shortForecast.includes('Mostly Cloudy')) {
+        return 'Cloudy.png';
+    }   
+    return 'Overflow.png'; // if a weather condition is not declared above this image will be displayed so we know we need to add an image for it
+}
 
 // Function to format and display weather information in HTML
 async function displayWeatherInfo(locationCode) {
@@ -34,12 +51,18 @@ async function displayWeatherInfo(locationCode) {
         // Convert start time to 12-hour format
         const startTime = convertTo12Hour(currentPeriod.startTime);
 
+        const currentImage = getWeatherIcon(currentPeriod.shortForecast); 
+        
         // Populate the weather boxes with the current hour's data
-        document.getElementById('weather-box-TL').innerHTML = `<h3>${startTime}</h3>`;
-        document.getElementById('weather-box-TR').innerHTML = `<p>Temperature: ${currentPeriod.temperature} °F</p>`;
-        document.getElementById('weather-box-BBL').innerHTML = `<p>${currentPeriod.shortForecast}</p>`;
-        document.getElementById('weather-box-BR').innerHTML = `<p>Precipitation Probability: ${currentPeriod.probabilityOfPrecipitation.value}%</p>`;
-
+        document.getElementById('weather-box-Disp').innerHTML = `<p>Current</p>`;
+        document.getElementById('weather-box-TempDisp').innerHTML = `<p>${currentPeriod.temperature} °F</p>`;
+        document.getElementById('weather-box-IconDisp').innerHTML = `<img src="${currentImage}">`;
+        document.getElementById('weather-box-TL').innerHTML = `<p>${currentPeriod.shortForecast}</p>`;
+        document.getElementById('weather-box-BR').innerHTML = `<p>Precipitation Chance: ${currentPeriod.probabilityOfPrecipitation.value}%</p>`;
+        document.getElementById('weather-box-TR').innerHTML = `<p>Humidty: ${currentPeriod.relativeHumidity.value}%</p>`;
+        document.getElementById('weather-box-BL').innerHTML = `<p>${currentPeriod.windSpeed} Winds</p>`;
+        
+    
         // Iterate through each period starting from the next hour and update HR1 to HR4
         for (let i = 1; i <= 5; i++) {
             const containerId = `weather-box-HR${i}`;
@@ -57,19 +80,16 @@ async function displayWeatherInfo(locationCode) {
                 // Convert wind speed from "5 mph" to "5 MPH"
                 const windSpeed = period.windSpeed.toUpperCase();
 
-                // Extract the icon URL from the API response
-                const iconUrl = period.icon;
+                // Get custom image based on the short forecast
+                const WeatherIcon = getWeatherIcon(period.shortForecast);
 
                 const periodDiv = document.createElement('div');
                 periodDiv.classList.add('weather-period');
 
                 periodDiv.innerHTML = `
-                    <h3>${startTime}</h3>
-                    <p>Temperature: ${period.temperature} °F</p>
-                    <p>${period.shortForecast}</p>
-                    <p>Wind: ${windSpeed} from ${period.windDirection}</p>
-                    <p>Humidity: ${period.relativeHumidity.value}%</p>
-                    <p>Precipitation Probability: ${period.probabilityOfPrecipitation.value}%</p>
+                    <p>${startTime}</p>
+                    <img src="${WeatherIcon}">
+                    <p>${period.temperature} °F</p>      
                 `;
 
                 weatherContainer.appendChild(periodDiv);
@@ -109,5 +129,8 @@ function convertTo12Hour(timeString) {
     }).replace(':00', ''); 
 }
 
-const locationCode = '75,125'; // Replace with your location code
+const locationCode = '36,89'; // Replace with your location code
 displayWeatherInfo(locationCode);
+
+//Union City weather Api
+//https://api.weather.gov/gridpoints/MEG/36,89/forecast/hourly
