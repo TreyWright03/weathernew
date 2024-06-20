@@ -1,7 +1,8 @@
 body, html {
     height: 100%;
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700; /* Equivalent to Helvetica Neue 75 Bold */
 }
 
 .weather-app {
@@ -32,6 +33,19 @@ body, html {
     border-radius: 5px;
     text-align: center;
     z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#weather-box-TL,
+#weather-box-TR,
+#weather-box-BBL,
+#weather-box-BR {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em; /* Increase font size for these boxes */
 }
 
 #weather-box-TL {
@@ -75,28 +89,28 @@ body, html {
 
 #weather-box-HR2 {
     top: 200px;
-    left: -160px;
+    left: -155px;
     width: 195px;
     height: 300px;
 }
 
 #weather-box-HR3 {
     top: 200px;
-    left: 210px;
+    left: 215px;
     width: 195px;
     height: 300px;
 }
 
 #weather-box-HR4 {
     top: 200px;
-    left: 562px;
+    left: 570px;
     width: 195px;
     height: 300px;
 }
 
 #weather-box-HR5 {
     top: 200px;
-    left: 914px;
+    left: 920px;
     width: 195px;
     height: 300px;
 }
